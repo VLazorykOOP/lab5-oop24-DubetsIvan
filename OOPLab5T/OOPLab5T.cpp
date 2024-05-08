@@ -1,24 +1,84 @@
-﻿// OOPLab5T.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include <iostream>
 
+using namespace std;
 
-#include <iostream>
+class Quadrilateral {
+protected:
+    double side1, side2; // сторони чотирикутника
 
-// Ваші файли загловки 
-//
-#include "Lab5Exmaple.h"
-int main()
-{
-    std::cout << " Lab #5  !\n";
-    //  Код виконання завдань
-    //  Головне меню завдань
-    //  Функції та класи можуть знаходитись в інших файлах проекту
+public:
+    // Конструктор
+    Quadrilateral(double s1, double s2) : side1(s1), side2(s2) {}
 
-    int chain = 1;
-    if (chain == 1) chain = mainExample1();
-    if (chain == 2) chain = mainExample2();
-    if (chain == 3) chain = mainExample3();
-    if (chain == 4) chain = mainExample4();
-    if (chain == 5) chain = mainExample5();
+    // Віртуальний деструктор
+    virtual ~Quadrilateral() {}
 
+    // Чисто віртуальні функції для обчислення площі та периметра
+    virtual double getArea() const = 0;
+
+    virtual double getPerimeter() const = 0;
+
+    // Віртуальна функція для виведення інформації про чотирикутник
+    virtual void print() const {
+        cout << "Quadrilateral with sides: " << side1 << ", " << side2 << endl;
+    }
+};
+
+class Rectangle : public Quadrilateral {
+public:
+    // Конструктор прямокутника
+    Rectangle(double width, double height) : Quadrilateral(width, height) {}
+
+    // Деструктор
+    ~Rectangle() {}
+
+    // Обчислення площі прямокутника
+    double getArea() const override {
+        return side1 * side2;
+    }
+
+    // Обчислення периметра прямокутника
+    double getPerimeter() const override {
+        return 2 * (side1 + side2);
+    }
+
+    // Функція для виведення інформації про прямокутник
+    void print() const override {
+        cout << "Rectangle with width " << side1 << " and height " << side2 << endl;
+    }
+};
+
+class Square : public Rectangle {
+public:
+    // Конструктор квадрата
+    Square(double side) : Rectangle(side, side) {}
+
+    // Деструктор
+    ~Square() {}
+
+    // Функція для виведення інформації про квадрат
+    void print() const override {
+        cout << "Square with side " << side1 << endl;
+    }
+};
+
+int main() {
+    // Створення об'єктів різних типів чотирикутників
+    Quadrilateral* quad1 = new Rectangle(4, 5);
+    Quadrilateral* quad2 = new Square(3);
+
+    // Виведення інформації про перший чотирикутник
+    cout << "Quadrilateral 1" << endl;
+    quad1->print();
+    cout << "Area: " << quad1->getArea() << ", Perimeter: " << quad1->getPerimeter() << endl;
+
+    // Виведення інформації про другий чотирикутник
+    cout << "Quadrilateral 2" << endl;
+    quad2->print();
+    cout << "Area: " << quad2->getArea() << ", Perimeter: " << quad2->getPerimeter() << endl;
+
+    delete quad1;
+    delete quad2;
+
+    return 0;
 }
